@@ -1,0 +1,241 @@
+//Autor Christian Acosta Osorio
+
+/*
+Algunas especificaciones:
+"contar" la agregue para jugar un poco, probaba a pedirle +100000000 aleatorios y veia cuantas veces aparecia el numero buscado
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+void generar(int aleatorios[],int tam);
+void imprimir(int aleatorios[], int tam);  
+void buscar(int aleatorios[], int tam, int buscar);
+void partir(int aleatorios[],int primero,int ultimo);
+void mezclar(int aleatorios[], int primero, int mitad, int ultimo);
+//void contar(int ale[], int tam, int buscar);
+void busqueda(int aleatorios[],int primero, int ultimo, int x);
+void tiempo(int inicio, int fin);
+
+
+int main() {
+	
+   int num, *ale, i, mos, x;
+   clock_t inicio, fin;
+
+   
+inicio=clock();
+ i=0;
+   printf("Cuantos numeros aleatorios quiere generar?\n");
+   scanf("%d", &num);
+   if(num<5){
+   	num=5;
+   }else{
+   }
+       ale = (int *) malloc(num * sizeof(int));
+   generar(ale, num);
+  
+            mos=0;
+    printf("\nMostrar arreglo? \nSi=1  No=0\n");
+    scanf("%d", &mos);
+
+	if(mos==1){
+
+imprimir(ale, num);
+        }else{
+		}
+		
+        
+	printf("\nQue numero quiere buscar?\n");
+	scanf("%d",&x);
+    buscar(ale, num, x);
+  //  contar(ale, num, x);
+
+    mos=0;
+     printf("\nQuieres ordenar el arreglo? \nSi=1  No=0\n");
+    scanf("%d", &mos);
+
+	if(mos==1){
+        partir(ale,0,num-1); 
+	    mos=0;
+	 printf("\nMostrar arreglo ordenado? \nSi=1  No=0\n");
+	    scanf("%d", &mos);
+	 if (mos==1)
+    {
+        printf("\nArreglo ordenado\n");
+        for(int k=0;k<num;k++){
+            printf("%d  ",ale[k]);
+        }
+    }
+	mos=0;	
+	x=0;
+		 printf("\nQuiere buscar un numero en arreglo ordenado? \nSi=1  No=0\n");
+	    scanf("%d", &mos);
+	 if (mos==1)
+    {
+     	printf("\nQue numero quiere buscar?\n");
+	scanf("%d",&x);
+	busqueda(ale,0,num-1,x);
+ //   contar(ale, num, x);
+    }else{
+	}
+ 
+    }else{
+	}
+	fin=clock();	
+
+
+tiempo(inicio,fin);	
+
+
+
+
+       
+ 	free(ale);  
+   
+    return 0;
+}
+//punto 1
+  void generar(int aleatorios[],int tam){
+  	int i;
+  	 for(i=0;i<tam;i++){
+            aleatorios[i]=1+rand()%100;
+        }
+
+  }
+  //punto 2
+    void imprimir(int aleatorios[], int tam)    {
+  	int i;
+  	 for(i=0;i<tam;i++){
+            printf("%d,",aleatorios[i]);	
+        }
+  } 
+  //punto3
+void buscar(int ale[], int tam, int buscar) {
+    int encontrado = 0;
+    int j=0;
+    for (int i = 0; i < tam; i++) {
+    	j++;
+        if (ale[i] == buscar) {
+           encontrado = 1;  
+            break;
+        }
+    }
+    if (encontrado==1) {
+        printf("El numero %d se encontro en posicion %d \n", buscar, j);
+    } else {
+        printf("El numero %d no esta\n", buscar);
+    }
+}
+
+//punto 4 
+// ordenamiento por mezcla, por lo mismo de que le empece a meter al programa demasiados valores
+// esta parte se encarga de encontrar inicio, mitad y final del arreglo para la mezcla
+void partir(int aleatorios[],int primero,int ultimo){
+	
+    if(primero<ultimo)
+    {
+              
+    int mitad = primero + (ultimo-primero)/2;
+
+    partir(aleatorios,primero,mitad);
+    partir(aleatorios,mitad+1,ultimo);
+    mezclar(aleatorios,primero,mitad,ultimo);
+    }
+}
+
+
+// se usa para el ordenamiento por mezcla
+//va cambiando los datos para realizar la mezcla
+void mezclar(int aleatorios[], int primero, int mitad, int ultimo)
+{
+ 
+    int contale1, contale2, contaleprin,tamale1 = mitad - primero + 1,tamale2 = ultimo - mitad;
+
+
+    int * ale1, * ale2;
+    ale1 = (int *) malloc(tamale1 * sizeof(int));
+    ale2 = (int *) malloc(tamale2 * sizeof(int));
+
+
+    for (int i = 0; i < tamale1; i++)
+        ale1[i] = aleatorios[primero + i];
+    for (int j = 0; j < tamale2; j++)
+        ale2[j] = aleatorios[mitad + 1 + j];
+  
+    contale1 = 0;
+    contale2 = 0; 
+    contaleprin = primero;
+
+
+
+    while (contale1 < tamale1 && contale2 < tamale2) {
+        if (ale1[contale1] <= ale2[contale2]) {
+            aleatorios[contaleprin] = ale1[contale1];
+            contale1++;
+        }
+        else {
+            aleatorios[contaleprin] = ale2[contale2];
+            contale2++;
+        }
+        contaleprin++;
+    }
+    while (contale1 < tamale1) {
+        aleatorios[contaleprin] = ale1[contale1];
+        contale1++;
+        contaleprin++;
+    }
+    while (contale2 < tamale2) {
+        aleatorios[contaleprin] = ale2[contale2];
+        contale2++;
+        contaleprin++;
+    }
+    free(ale1);
+    free(ale2);
+}
+
+// indica cuantas veces aparece el valor buscado
+/*                       
+void contar(int ale[], int tam, int buscar) {
+    int encontrado = 0;
+    int e=0;
+    for (int i = 0; i < tam; i++) {
+        if (ale[i] == buscar) {
+        	e++;
+        }else{
+		}
+    }
+ 
+        printf("El numero %d esta %d veces \n", buscar, e);
+e=0;
+}
+*/
+
+// punto 5
+//realice una busqueda binaria aprovechando el ordenamiento del arreglo en el punto 4
+void busqueda(int ale[],int primero, int ultimo, int x) {
+	   while (primero <= ultimo) {
+     int mitad = primero + (ultimo-primero)/2;
+
+      if (ale[mitad] == x) {
+         printf("El numero %d desde 0 esta en posicion %d \n", x, mitad);
+return;
+      } else if (ale[mitad] < x) {
+         primero = mitad + 1;
+      } else {
+         ultimo = mitad - 1;
+      }
+   }
+   printf("El numero %d no esta\n", x);
+}
+
+//punto 6
+void tiempo(int inicio, int fin){
+	double tiempo;
+	tiempo=(double)(fin-inicio)/CLOCKS_PER_SEC;
+	printf("El tiempo de ejecucon del p1 al p5 fue de: %f segundos\n", tiempo);
+}
+
+
+
+
