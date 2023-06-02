@@ -1,0 +1,146 @@
+//Autor Christian Acosta Osorio
+#include <stdio.h>
+#include <stdlib.h>
+
+void partir(int aleatorios[],int primero,int ultimo);
+void mezclar(int a[], int primero, int mitad, int ultimo);
+void busqueda(int ale[],int primero, int ultimo, int x);
+int main() {
+	
+   int num, *ale, mos, i, x;
+   
+   
+       ale = (int *) malloc(num * sizeof(int));
+ i=0;
+   printf("Cuantos numeros aleatorios quiere generar?");
+   scanf("%d", &num);
+   
+   for(int i=0;i<num;i++){
+            ale[i]=1+rand()%100;
+        }
+        i=0;
+            mos=0;
+    printf("\nMostrar arreglo? \nSi=1  No=0\n");
+    scanf("%d", &mos);
+
+	if(mos==1){
+            for(int i=0;i<num;i++){
+            printf("%d,",ale[i]);	
+        }
+	}
+	
+ partir(ale,0,num-1);  
+ mos=0;
+	 printf("\nMostrar arreglo? \nSi=1  No=0\n");
+	    scanf("%d", &mos);
+	 if (mos==1)
+    {
+        printf("\nArreglo ordenado\n");
+        for(int i=0;i<num;i++){
+            printf("%d  ",ale[i]);
+        }
+    }
+    mos=0;
+     printf("\nBuscar un elemento? \nSi=1  No=0\n");
+     	    scanf("%d", &mos);
+    	 if (mos==1)
+    {
+           printf("\nIngrese el elemento a buscar:\n ");
+   scanf("%d", &x);
+      busqueda(ale,0,num-1,x);
+        }
+
+
+    
+   
+
+ 	free(ale);  
+   
+    return 0;
+}
+                         
+
+
+void partir(int aleatorios[],int primero,int ultimo){
+	
+    if(primero<ultimo)
+    {
+ 
+    int mitad = primero + (ultimo-primero)/2;
+
+    partir(aleatorios,primero,mitad);
+    partir(aleatorios,mitad+1,ultimo);
+    mezclar(aleatorios,primero,mitad,ultimo);
+    }
+}
+
+
+
+void mezclar(int a[], int primero, int mitad, int ultimo)
+{
+ 
+    int contale1, contale2, contaleprin,tamale1 = mitad - primero + 1,tamale2 = ultimo - mitad;
+
+
+    int * ale1, * ale2;
+    ale1 = (int *) malloc(tamale1 * sizeof(int));
+    ale2 = (int *) malloc(tamale2 * sizeof(int));
+
+
+    for (int i = 0; i < tamale1; i++)
+        ale1[i] = a[primero + i];
+    for (int j = 0; j < tamale2; j++)
+        ale2[j] = a[mitad + 1 + j];
+
+    contale1 = 0;
+    contale2 = 0; 
+    contaleprin = primero;
+
+
+    while (contale1 < tamale1 && contale2 < tamale2) {
+        if (ale1[contale1] <= ale2[contale2]) {
+            a[contaleprin] = ale1[contale1];
+            contale1++;
+        }
+        else {
+            a[contaleprin] = ale2[contale2];
+            contale2++;
+        }
+        contaleprin++;
+    }
+
+    while (contale1 < tamale1) {
+        a[contaleprin] = ale1[contale1];
+        contale1++;
+        contaleprin++;
+    }
+
+    while (contale2 < tamale2) {
+        a[contaleprin] = ale2[contale2];
+        contale2++;
+        contaleprin++;
+    }
+    free(ale1);
+    free(ale2);
+}
+
+void busqueda(int ale[],int primero, int ultimo, int x) {
+	int repeticiones=0;
+	   while (primero <= ultimo) {
+	   	repeticiones++;
+     int mitad = primero + (ultimo-primero)/2;
+
+      if (ale[mitad] == x) {
+         printf("El numero %d desde 0 esta en %d y se repitio %d\n", x, mitad, repeticiones);
+         exit(0);
+      } else if (ale[mitad] < x) {
+         primero = mitad + 1;
+      } else {
+         ultimo = mitad - 1;
+      }
+   }
+   printf("El numero %d no esta y se repitio %d\n", x, repeticiones);
+   exit(0);
+}
+
+
