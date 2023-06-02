@@ -1,0 +1,27 @@
+//Autor: Acosta Osorio Christian
+#include <stdio.h>
+
+int main() {
+    int n, i;
+    int fibonacci[100];
+
+    // Pedimos al usuario el número de términos que desea generar
+    printf("Ingrese el número de términos que desea generar: ");
+    scanf("%d", &n);
+
+    // Generamos la secuencia de Fibonacci
+    fibonacci[0] = 0;
+    fibonacci[1] = 1;
+    for (i = 2; i < n; i++) {
+        fibonacci[i] = fibonacci[i-1] + fibonacci[i-2];
+    }
+
+    // Imprimimos la secuencia generada
+    printf("La secuencia de Fibonacci generada es: ");
+    for (i = 0; i < n; i++) {
+        printf("%d ", fibonacci[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
