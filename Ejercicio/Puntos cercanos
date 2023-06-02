@@ -1,0 +1,55 @@
+//Autor: Acosta Osorio Christian
+#include <stdio.h>
+#include <stdlib.h>
+#include <float.h>
+#include <math.h>
+
+typedef struct {
+    double x;
+    double y;
+} Punto;
+
+void distancia(Punto p1, Punto p2, double *dist) {
+    *dist = sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+}
+
+void intercambiar(Punto *a, Punto *b) {
+    Punto temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void fuerzaBruta(Punto P[], int n, Punto cercanos[]) {
+    double minDist = DBL_MAX;
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            double dist;
+            distancia(P[i], P[j], &dist);
+            if (dist < minDist) {
+                minDist = dist;
+                cercanos[0] = P[i];
+                cercanos[1] = P[j];
+            }
+        }
+    }
+}
+
+void encontrarParCercano(Punto P[], int n, Punto cercanos[]) {
+    fuerzaBruta(P, n, cercanos);
+}
+
+int main() {
+    int n;
+    printf("Ingrese el numero de puntos: ");
+    scanf("%d", &n);
+    Punto *P = malloc(n * sizeof(Punto));
+    for (int i = 0; i < n; i++) {
+        printf("Ingrese las coordenadas (x y) del punto %d: ", i+1);
+        scanf("%lf %lf", &P[i].x, &P[i].y);
+    }
+    Punto cercanos[2];
+    encontrarParCercano(P, n, cercanos);
+    printf("Par más cercano: (%f, %f), (%f, %f)\n", cercanos[0].x, cercanos[0].y, cercanos[1].x, cercanos[1].y);
+    free(P);
+    return 0;
+}
