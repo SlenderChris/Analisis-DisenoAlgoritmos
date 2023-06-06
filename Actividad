@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int solve(int n)
+{
+    
+    if (n < 0)
+        return 0;
+    if (n == 0)
+        return 1;
+
+    return solve(n-1) + solve(n-3) + solve(n-5);
+}
+
+int main()
+{
+    int N = 6;
+    int posibles = solve(N);
+    printf("El tootal de veces que se puede formar el %d es: %d\n", N, posibles);
+
+    return 0;
+}
