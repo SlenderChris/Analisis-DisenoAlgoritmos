@@ -1,0 +1,60 @@
+#Autor: Acosta Osorio Christian
+import random
+
+# Function to find the maximum no.
+# in a given array.
+def DAC_Max(a, index, l):
+    max = -1
+    if(l - 1 == 0):
+        return a[index]
+    if (index >= l - 2):
+        if (a[index] > a[index + 1]):
+            return a[index]
+        else:
+            return a[index + 1]
+
+    # Logic to find the Maximum element
+    # in the given array.
+    max = DAC_Max(a, index + 1, l)
+
+    if (a[index] > max):
+        return a[index]
+    else:
+        return max
+
+# Function to find the minimum no.
+# in a given array.
+def DAC_Min(a, index, l):
+    min = 0
+    if(l - 1 == 0):
+        return a[index]
+    if (index >= l - 2):
+        if (a[index] < a[index + 1]):
+            return a[index]
+        else:
+            return a[index + 1]
+
+    # Logic to find the Minimum element
+    # in the given array.
+    min = DAC_Min(a, index + 1, l)
+
+    if (a[index] < min):
+        return a[index]
+    else:
+        return min
+
+# Driver Code
+if __name__ == '__main__':
+    # Defining the variables
+    min_val, max_val = 0, -1
+
+    # Initializing the array with 10k random elements
+    a = [random.randint(0, 1000) for _ in range(10000)]
+
+    # Recursion - DAC_Max function called
+    max_val = DAC_Max(a, 0, len(a))
+
+    # Recursion - DAC_Max function called
+    min_val = DAC_Min(a, 0, len(a))
+    print("The minimum number in the given array is:", min_val)
+    print("The maximum number in the given array is:", max_val)
