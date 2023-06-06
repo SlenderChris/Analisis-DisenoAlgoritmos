@@ -48,7 +48,6 @@ if __name__ == '__main__':
     # Defining the variables
     min_val, max_val = 0, -1
 
-    # Initializing the array with 10k random elements
     a = [random.randint(0, 1000) for _ in range(10000)]
 
     # Recursion - DAC_Max function called
