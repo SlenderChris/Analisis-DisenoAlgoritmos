@@ -1,0 +1,74 @@
+//Autor: Acosta Osorio Christian
+#include <stdio.h>
+#include <stdlib.h>
+#include <float.h>
+#include <math.h>
+#include <time.h>
+
+typedef struct {
+    double x;
+    double y;
+} Punto;
+
+void distancia(Punto p1, Punto p2, double *dist) {
+    *dist = sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+}
+
+
+
+void fuerzaBruta(Punto P[], int n, Punto cercanos[]) {
+
+    double distmin = 50000;
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            double dist;
+            distancia(P[i], P[j], &dist);
+            if (dist < distmin) {
+                distmin = dist;
+                cercanos[0] = P[i];
+                cercanos[1] = P[j];
+            }
+        }
+    }
+}
+
+void encontrarPCercanos(Punto P[], int n, Punto cercanos[]) {
+    fuerzaBruta(P, n, cercanos);
+}
+
+int main() {
+    int n;
+    int aleatorios=40;
+    n=aleatorios;
+   // printf("Cuantos puntos quiere usar? ");
+  //  scanf("%d", &n);
+    Punto *P = malloc(aleatorios * sizeof(Punto));
+    // para generar los n pts
+ 
+        srand(time(NULL));
+    	for (int i = 0; i < aleatorios; i++) {
+        P[i].x = rand() % 100; 
+        P[i].y = rand() % 100; 
+    }
+        printf("Puntos generados aleatoriamente:\n");
+    	for (int i = 0; i < aleatorios; i++) {
+        	printf("(%f, %f)\n", P[i].x, P[i].y);
+    }
+    //introducir los pts manual
+    /*
+    for (int i = 0; i < n; i++) {
+        printf("Las coordenadas (x y) del punto %d: ", i+1);
+        scanf("%f %f", &P[i].x, &P[i].y);
+    }
+    */
+    Punto cercanos[2];
+    clock_t inicio = clock();
+    encontrarPCercanos(P, n, cercanos);
+    clock_t fin = clock();
+    double tiempo = (double)(fin - inicio) / CLOCKS_PER_SEC;
+    printf("Tiempo de ejecucion: %f segundos\n", tiempo);
+    
+    printf("Puntos cercanos: (%f, %f), (%f, %f)\n", cercanos[0].x, cercanos[0].y, cercanos[1].x, cercanos[1].y);
+;
+    return 0;
+}
