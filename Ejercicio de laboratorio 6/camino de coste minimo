@@ -1,0 +1,91 @@
+//Autor: Acosta Osorio Christian
+#include <stdio.h>
+#include<math.h>
+#include<time.h>
+#define FILAS 100
+#define COLUMNAS 100
+
+int min(int a, int b) {
+    if (a < b) {
+        return a;
+    } else {
+        return b;
+    }
+}
+//M = col N = fil
+int calcularCostoMinimo(int costo[FILAS][COLUMNAS], int col, int fil) {
+    int acumula[FILAS][COLUMNAS] = {0};
+
+    acumula[0][0] = costo[0][0];
+
+    for (int i = 1; i <= col; i++) {
+        acumula[i][0] = acumula[i - 1][0] + costo[i][0];
+    }
+
+    for (int j = 1; j <= fil; j++) {
+        acumula[0][j] = acumula[0][j - 1] + costo[0][j];
+    }
+
+    for (int i = 1; i <= col; i++) {
+        for (int j = 1; j <= fil; j++) {
+            acumula[i][j] = costo[i][j] + min(min(acumula[i - 1][j], acumula[i][j - 1]), acumula[i - 1][j - 1]);
+        }
+    }
+
+    return acumula[col][fil];
+}
+
+void mostrarMatriz(int mat[FILAS][COLUMNAS]) {
+    printf("Matriz:\n");
+    for (int i = 0; i < FILAS; i++) {
+        for (int j = 0; j < COLUMNAS; j++) {
+            printf("%d ", mat[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void generarMatrizAleatoria(int mat[FILAS][COLUMNAS]) {
+    srand(time(NULL));
+    for (int i = 0; i < FILAS; i++) {
+        for (int j = 0; j < COLUMNAS; j++) {
+            mat[i][j] = rand() % 10;
+        }
+    }
+}
+
+int main() {
+    int costo[FILAS][COLUMNAS];
+    clock_t inicio, fin;
+    double tiempoEjecucion;
+/*
+    printf("Ingrese los numeros para la matriz 3x3:\n");
+    for (int i = 0; i < FILAS; i++) {
+        for (int j = 0; j < COLUMNAS; j++) {
+
+            scanf("%d", &costo[i][j]);
+        }
+    }
+    */
+
+    generarMatrizAleatoria(costo);
+    mostrarMatriz(costo);
+
+    int col, fil;
+    printf("Ingrese la posicion del final (columna, fila): ");
+    scanf("%d %d", &col, &fil);
+
+    if (col >= 0 && col < FILAS && fil >= 0 && fil < COLUMNAS) {
+        inicio = clock();
+        int costoMinimo = calcularCostoMinimo(costo, col, fil);
+        fin = clock();
+       tiempoEjecucion = (double)(fin - inicio) / CLOCKS_PER_SEC;
+
+        printf("El costo minimo de la ruta hasta la posicion (%d, %d) es: %d\n", col, fil, costoMinimo);
+        printf("Tiempo de ejecucion: %.6f segundos\n", tiempoEjecucion);
+       } else {
+        printf("Te saliste de la matriz\n");
+    }
+
+    return 0;
+}
