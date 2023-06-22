@@ -5,7 +5,11 @@
 #define COLUMNAS 3
 
 int min(int a, int b) {
-    return (a < b) ? a : b;
+    if (a < b) {
+        return a;
+    } else {
+        return b;
+    }
 }
 //M = col N = fil
 int calcularCostoMinimo(int costo[FILAS][COLUMNAS], int col, int fil) {
